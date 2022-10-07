@@ -1,0 +1,53 @@
+version: '3.5'
+services:
+
+  redis:
+    image: redis:6.2-alpine
+    hostname: ${REDIS_HOST}
+    container_name: ${REDIS_HOST}
+    restart: always
+    ports:
+      - '${REDIS_PORT}:${REDIS_PORT}'
+    expose:
+      - ${REDIS_PORT}
+    command: redis-server --port ${REDIS_PORT} --save 20 1 --loglevel warning --requirepass ${REDIS_PASSWORD}
+    volumes:
+      - ./redis-data:/data
+
+  m_ork:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_other
+      target: m_ork
+    restart: always
+    env_file: .env
+    volumes:
+      - ./logs/m_ork:/app/logs
+    depends_on:
+      -   m_web
+
+  m_worker:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_worker
+    restart: always
+    env_file: .env
+    volumes:
+      - ./logs/m_worker:/app/logs
+      - ./profile:/app/profile
+    depends_on:
+      - m_ork
+
+  m_web:
+    build:
+      context: .
+      dockerfile: ./Dockerfile_other
+      target: m_web
+    restart: always
+    env_file: .env
+    ports:
+      - "36551:36551"
+    volumes:
+      - ./logs/m_web:/app/logs
+    depends_on:
+      - redis

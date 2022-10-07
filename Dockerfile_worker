@@ -1,0 +1,16 @@
+FROM mcr.microsoft.com/playwright:v1.24.0-focal
+
+RUN apt-get update && DEBIAN_FRONTEND="noninteractive" TZ="Europe/Kiev" apt-get install -y python3.9 python3-pip python3-dev gcc libc-dev libffi-dev tesseract-ocr
+
+WORKDIR /app
+
+COPY ./utils ./utils
+COPY ./envs ./envs
+COPY req_worker.txt ./req_worker.txt
+
+RUN pip3 install --upgrade pip
+RUN pip3 install -r req_worker.txt
+RUN playwright install chromium && playwright install-deps
+
+COPY m_worker ./m_worker
+CMD sh -c "xvfb-run --server-args='-screen 0, 1024x768x24' --auto-servernum --server-num=1 python3 -m m_worker"

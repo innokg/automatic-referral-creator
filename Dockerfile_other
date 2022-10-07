@@ -1,0 +1,24 @@
+FROM python:3.9-alpine as base
+
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PIP_NO_CACHE_DIR false
+
+RUN apk update && apk upgrade && \
+    apk add --update --no-cache python3-dev gcc libc-dev libffi-dev
+
+WORKDIR /app
+
+COPY ./envs ./envs
+COPY ./utils ./utils
+COPY req_other.txt ./req_other.txt
+RUN pip install --upgrade pip
+RUN pip install -r req_other.txt
+
+FROM base as m_ork
+COPY m_ork ./m_ork
+CMD sh -c "python -m m_ork"
+
+FROM base as m_web
+COPY m_web ./m_web
+CMD sh -c "python -m m_web"

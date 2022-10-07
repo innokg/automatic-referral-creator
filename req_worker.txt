@@ -1,0 +1,10 @@
+redis
+environs
+names
+loguru
+playwright
+pytesseract
+playwright_stealth
+playwright
+pytest-playwright
+
