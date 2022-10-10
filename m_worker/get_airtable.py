@@ -60,7 +60,7 @@ class AirTable:
 
 
         logger.info("AirTable Wait new email element2.")
-        if not wait_element_for_send(self.airtable_invite_page, '//*[@id="signUpForm"]/div/div/label/input', fullname):
+        if not wait_element_for_send(self.airtable_invite_page, '//*[@id="signUpForm"]/div[2]/div[1]/input', fullname):
             self.airtable_invite_page.screenshot(path='./profile/new_name2.png')
             logger.error("AirTable Error new email element2.")
             return False
@@ -68,7 +68,7 @@ class AirTable:
 
         time.sleep(5)
         logger.info("AirTable Wait new password element.")
-        if not wait_element_for_send(self.airtable_invite_page, '//*[@id="signUpForm"]/label[2]/div/input', password):
+        if not wait_element_for_send(self.airtable_invite_page, '//*[@id="signUpForm"]/div[3]/div/input', password):
             self.airtable_invite_page.screenshot(path='./profile/new_password.png')
             logger.error("AirTable Error new password element.")
             return False
@@ -86,8 +86,8 @@ class AirTable:
         time.sleep(20)
         logger.info("After complete creating Account press 'skip' button 2 times")
         self.airtable_invite_page.screenshot(path='./profile/skip.png')
-        if not wait_element_for_click(self.airtable_invite_page, '//*[@id="workspaceSetupDialogContainer"]/div[2]/div/div/div[2]/div/div[2]/div[2]/div[1]') \
-                    and not wait_element_for_click(self.airtable_invite_page, '//*[@id="workspaceSetupDialogContainer"]/div[2]/div/div/div[2]/div/div[2]/div[2]'):
+        if not wait_element_for_click(self.airtable_invite_page, '//*[@id="wizardLeft"]/div/form/div[2]/div[2]/button') \
+                    and not wait_element_for_click(self.airtable_invite_page, '//*[@id="wizardLeft"]/div/form/div[2]/div[2]/button'):
             self.airtable_invite_page.screenshot(path='./profile/press_skip.png')
             logger.error("Airtable Error skip button")
             return False
